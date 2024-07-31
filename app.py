@@ -55,7 +55,7 @@ def students():
         return 'Deleted Student'
 
 @app.route('/person/connections')
-def get_student_connections():
+def get_connections():
     id = request.args.get('id')
     connections=[]
     for instance in Person.instances[id].personal_connections:
