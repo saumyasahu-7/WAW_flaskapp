@@ -163,15 +163,16 @@ def get_students_in_house():
     return jsonify(students_in_house)
 
 #API endpoint for adding points to student and their respective house
-@app.route('/addpoints', methods=['POST'])
+@app.route('/addpoints', methods=['PUT'])
 def add_points():
-    data=request.json
-    student_id=data.get('student_id')
-    points_added=data.get('points_added')
-    for instance in Student.student_instances:
-        if(instance.id==student_id):
-            instance.add_points(points_added)
-            break
+    if(request.method=='PUT'):
+        data=request.json
+        student_id=data.get('student_id')
+        points_added=data.get('points_added')
+        for instance in Student.student_instances.values():
+            if(instance.id==student_id):
+                instance.add_points(points_added)
+                break
     return "Points added"
 
 #API endpoints for connections
@@ -189,7 +190,6 @@ def connections():
     
     #Reading shortest connecting path length
     if(request.method=='GET'):
-        data=request.json
         id1 = request.args.get('id1')
         id2 = request.args.get('id2')
         queue=deque()
@@ -213,9 +213,8 @@ def connections():
         
     #deleting connection between 2 people
     if(request.method=='DELETE'):
-        data=request.json
-        id1=data.get("id1")
-        id2=data.get("id2")
+        id1 = request.args.get('id1')
+        id2 = request.args.get('id2')
 
         Person.instances[id1].personal_connections.remove(Person.instances[id2])
         Person.instances[id2].personal_connections.remove(Person.instances[id1])
