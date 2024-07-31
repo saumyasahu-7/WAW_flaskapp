@@ -202,9 +202,9 @@ def connections():
                     queue.append([connection,curr_dist+1])
                     
         if(dist[Person.instances[id2]]==1e9):
-            return {"person1":Person.instances[id1].name,"message":"not connected"}
+            return {"message":"not connected"}
         else:
-            return {"length of shorted connecting path":dist[id2]}
+            return {"length of shorted connecting path":dist[Person.instances[id2]]}
         
     #deleting connection between 2 people
     if(request.method=='DELETE'):
