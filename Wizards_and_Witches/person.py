@@ -21,6 +21,7 @@ class Person:
 
 class Student(Person):
     student_instances={}
+    student_count=1
     def __init__(self, name: str, id:str, house=None):
         super().__init__(name, id)
         self.points=0
@@ -46,6 +47,7 @@ class Student(Person):
 
 class Professor(Person):
     professor_instances={}
+    professor_count=1
     def __init__(self, name: str, id:str, house=None):
         super().__init__(name, id, house)
         self.__add_to_house()

@@ -4,9 +4,6 @@ from Wizards_and_Witches.houses import House
 from Wizards_and_Witches.person import Person, Student, Professor
 app = Flask(__name__)
 
-student_count=1
-professor_count=1
-
 #API endpoints for Students
 @app.route('/students', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def students():
@@ -26,12 +23,11 @@ def students():
     
     #Creating new Students
     if(request.method=='POST'):
-        global student_count
         data=request.json
-        id='s'+str(student_count)
+        id='s'+str(Student.student_count)
         name=data.get('name')
         student=Student(name,id)
-        student_count+=1
+        Student.student_count+=1
         return 'Created Student'
         
     #Updating data of a student
@@ -78,11 +74,11 @@ def professors():
     if(request.method=='POST'):
         global professor_count
         data=request.json
-        id='p'+str(professor_count)
+        id='p'+str(Professor.professor_count)
         name=data.get("name")
         house_name=data.get("house")
         professor=Professor(name,id,House().mapping_to_house_name[house_name])
-        professor_count+=1
+        Professor.professor_count+=1
         return 'Created Professor'
         
     #Updating data of a professor
