@@ -54,6 +54,16 @@ def students():
             del instance
         return 'Deleted Student'
 
+@app.route('/person/connections')
+def get_student_connections():
+    id = request.args.get('id')
+    connections=[]
+    for instance in Person.instances[id].personal_connections:
+        connection={}
+        connection['name']=instance.name
+        connections.append(connection)
+    return jsonify(connections)
+
 #API endpoints for Professor
 @app.route('/professors', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def professors():
@@ -72,7 +82,6 @@ def professors():
     
     #Creating new professors
     if(request.method=='POST'):
-        global professor_count
         data=request.json
         id='p'+str(Professor.professor_count)
         name=data.get("name")
@@ -181,8 +190,8 @@ def connections():
     #Reading shortest connecting path length
     if(request.method=='GET'):
         data=request.json
-        id1=data.get("id1")
-        id2=data.get("id2")
+        id1 = request.args.get('id1')
+        id2 = request.args.get('id2')
         queue=deque()
         dist=defaultdict(lambda:1e9)
         dist[Person.instances[id1]]=0
