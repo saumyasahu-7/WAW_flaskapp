@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from Wizards_and_Witches.person import Person
-from Wizards_and_Witches.houses import House
+from models.person import Person
+from models.house import House
 
 person_bp=Blueprint('person', __name__)
 
@@ -8,5 +8,11 @@ person_bp=Blueprint('person', __name__)
 def get_connections():
     id = request.args.get('id')
     person=Person.objects(person_id=id).first()
-    connections=person.personal_connections
+    connections=[]
+    for connection in person.personal_connections:
+        connected={
+            'id':connection.person_id,
+            'name':connection.name
+        }
+        connections.append(connected)
     return jsonify(connections)

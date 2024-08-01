@@ -29,7 +29,7 @@ class Student(Person):
     points=IntField(default=0)
 
     def __add_to_house(self):
-        self.house.students.append(self)
+        self.house.add_student_to_house(self)
         self.house.save()
 
     def assign_house(self):
@@ -41,11 +41,11 @@ class Student(Person):
 
     def add_points(self,points):
         self.points=self.points+points
-        self.house.points+=self.house.points+points
+        self.house.add_points_to_house(points)
         self.save()
 
 class Professor(Person):
 
     def add_to_house(self,house):
-        self.house.professors.append(self)
+        self.house.add_professor_to_house(self)
         self.save()

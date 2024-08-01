@@ -10,13 +10,13 @@ def professors():
     if(request.method=='GET'):
         all_professors=[]
         for professor in Professor.objects():
-            stud={
+            prof={
                 'name':professor.name,
                 'id':professor.person_id,
                 'house':professor.house.house_name,
                 'no of connections':len(professor.personal_connections)
             }
-            all_professors.append(stud)
+            all_professors.append(prof)
         return jsonify(all_professors)
     
     #Creating new professors
