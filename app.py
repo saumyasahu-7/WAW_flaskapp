@@ -1,27 +1,24 @@
 from flask import Flask
-from routes import init_app
 from flask_pymongo import PyMongo
+from mongoengine import connect, disconnect
+from routes.__init__ import init_app
+from models.house import House
 
-# Initialize PyMongo without app
-mongo = PyMongo()
+disconnect()
+connect(db="mydb", alias='default')
 
-def create_app():
-    app = Flask(__name__)
-    # Configure the MongoDB connection
-    app.config["MONGO_URI"] = "mongodb://localhost:27017/mydatabase"
-    # Initialize PyMongo with the app
-    mongo.init_app(app)
-    # Import and register blueprints (or routes)
-    init_app(app)
-    return app
+app = Flask(__name__)
+app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
+mongo = PyMongo(app)
+init_app(app)
 
-app = create_app()
-
-@app.route('/')
+@app.route("/")
 def hello_world():
-    # Use the mongo instance to insert a document
-    mongo.db.inventory.insert_one({"a": 1})
-    return "hello world"
+    return "<p>Hello, World!</p>"
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if(__name__=="__main__"):
+    Gryffindor=House.create_house("Gryffindor","h1")
+    Hufflepuff=House.create_house("Hufflepuff","h2")
+    Ravenclaw=House.create_house("Ravenclaw","h3")
+    Slytherin=House.create_house("Slytherin","h4")
+    app.run(debug=True, port=5001)

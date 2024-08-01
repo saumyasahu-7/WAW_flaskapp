@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from Wizards_and_Witches.person import Person
+from models.person import Person
 from collections import deque, defaultdict
 
 connection_bp=Blueprint('connection', __name__)
@@ -10,11 +10,10 @@ def connections():
     #making connection between 2 people
     if(request.method=='POST'):
         data=request.json
-        id1=data.get("id1")
-        id2=data.get("id2")
+        person1=Person.objects(person_id=data.get("id1")).first()
+        person2=Person.objects(person_id=data.get("id2")).first()
 
-        Person.instances[id1].personal_connections.append(Person.instances[id2])
-        Person.instances[id2].personal_connections.append(Person.instances[id1])
+        person1.connect(person2)
         return 'Connection Made'
     
     #Reading shortest connecting path length
@@ -42,9 +41,9 @@ def connections():
         
     #deleting connection between 2 people
     if(request.method=='DELETE'):
-        id1 = request.args.get('id1')
-        id2 = request.args.get('id2')
+        data=request.json
+        person1=Person.objects(person_id=data.get("id1")).first()
+        person2=Person.objects(person_id=data.get("id2")).first()
 
-        Person.instances[id1].personal_connections.remove(Person.instances[id2])
-        Person.instances[id2].personal_connections.remove(Person.instances[id1])
-        return 'Connection Deleted'
+        person1.disconnect(person2)
+        return 'Connection Made'

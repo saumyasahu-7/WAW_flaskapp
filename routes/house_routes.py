@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from Wizards_and_Witches.houses import House
+from models.house import House
 
 house_bp=Blueprint('house', __name__)
 #API endpoints for houses
@@ -7,46 +7,32 @@ house_bp=Blueprint('house', __name__)
 def houses():
     if(request.method=='GET'):
         house_and_points=[]
-        for house in House().all_houses:
-            house_detail={}
-            house_detail['house_name']=house['house_name']
-            house_detail['points']=house['points']
-            house_and_points.append(house_detail)
+        for house in House.objects():
+            h={
+                "name":house.house_name,
+                "points":house.points
+            }
+            house_and_points.append(h)
         return jsonify(house_and_points)
 
 #API endpoint for getting professors in a house
 @house_bp.route('/houses/professors')
 def get_professors_in_house():
     house_id = request.args.get('house_id')
-    professors_in_house=[]
-    for house in House().all_houses:
-        if(house['house_id']==house_id):
-            for instance in house['professors']:
-                prof={
-                "professor_id": instance.id,
-                "name": instance.name,
-                "house": instance.house['house_name'],
-                "no_of_connections": len(instance.personal_connections)
-                }
-                professors_in_house.append(prof)
-            break
+    house=House.objects(house_id=house_id).first()
+    
+    if not house:
+        return jsonify({"message":"House not found"})
+    professors_in_house=house.professors
     return jsonify(professors_in_house)
 
 #API endpoint for getting students in a house
 @house_bp.route('/houses/students')
 def get_students_in_house():
     house_id = request.args.get('house_id')
-    students_in_house=[]
-    for house in House().all_houses:
-        if(house['house_id']==house_id):
-            for instance in house['students']:
-                stud={
-                    "student_id": instance.id,
-                    "name": instance.name,
-                    "house": instance.house['house_name'],
-                    "points": instance.points,
-                    "no_of_connections": len(instance.personal_connections)
-                }
-                students_in_house.append(stud)
-            break
+    house=House.objects(house_id=house_id).first()
+    
+    if not house:
+        return jsonify({"message":"House not found"})
+    students_in_house=house.students
     return jsonify(students_in_house)

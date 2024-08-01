@@ -7,9 +7,6 @@ person_bp=Blueprint('person', __name__)
 @person_bp.route('/person/connections')
 def get_connections():
     id = request.args.get('id')
-    connections=[]
-    for instance in Person.instances[id].personal_connections:
-        connection={}
-        connection['name']=instance.name
-        connections.append(connection)
+    person=Person.objects(person_id=id).first()
+    connections=person.personal_connections
     return jsonify(connections)
