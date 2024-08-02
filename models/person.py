@@ -30,7 +30,6 @@ class Student(Person):
 
     def __add_to_house(self):
         self.house.add_student_to_house(self)
-        self.house.save()
 
     def assign_house(self):
         #used House() to access instance attributes of House
@@ -47,5 +46,5 @@ class Student(Person):
 class Professor(Person):
 
     def add_to_house(self,house):
-        self.house.add_professor_to_house(self)
         self.save()
+        self.house.add_professor_to_house(self)

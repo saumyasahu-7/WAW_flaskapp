@@ -22,11 +22,9 @@ class House(Document):
         self.save()
 
     def add_student_to_house(self,student):
-        student.save()
         self.students.append(student)
         self.save()
 
     def add_professor_to_house(self,professor):
-        professor.save()
         self.professors.append(professor)
         self.save()
